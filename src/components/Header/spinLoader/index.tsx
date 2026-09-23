@@ -1,11 +1,9 @@
-'use client';
-
 type SpinLoaderProps = {
-    containerClasses?: string
+    className?: string
 }
 
-export function SpinLoader({containerClasses = ''}: SpinLoaderProps) {
-    const classes = `flex items-center justify-center ${containerClasses}`.trim();
+export function SpinLoader({className = ''}: SpinLoaderProps) {
+    const classes = `flex items-center justify-center ${className}`.trim();
 
     return (
     <div className={classes}>

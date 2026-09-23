@@ -1,11 +1,26 @@
+import { Suspense } from "react";
 import { SpinLoader } from "../components/Header/spinLoader";
-import { postRepository } from "../repository/post";
+import { PostsList } from "../components/PostsList";
 
-export default function homePage() {
+export default async function homePage() {
 
   return (
     <div>
-      <SpinLoader containerClasses="min-h-[500px] bg-amber-500" />
+      <header>
+        <h1 className="text-6xl font-bold text-center py-8">
+          Aqui é a header
+        </h1>
+      </header>
+
+      <Suspense fallback={<SpinLoader/>}>
+          <PostsList />
+      </Suspense>
+
+        <footer>
+        <p className="text-6xl font-bold text-center py-8">
+          Aqui é a footer
+        </p>
+      </footer>
     </div>
   );
 }
