@@ -1,13 +1,11 @@
+import { SpinLoader } from "../components/Header/spinLoader";
+import { postRepository } from "../repository/post";
+
 export default function homePage() {
+
   return (
     <div>
-      <h1 className="text-xl font-bold text-blue-500 hover:text-blue-900 hover:bg-blue-500">
-        Texto no H1
-      </h1>
+      <SpinLoader containerClasses="min-h-[500px] bg-amber-500" />
     </div>
   );
 }
-
-//page.tsx = index.html
-// app/page.tsx 
-//app/about/page.tsx → /about
