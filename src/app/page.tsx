@@ -1,19 +1,15 @@
 import { Suspense } from "react";
-import { SpinLoader } from "../components/Header/spinLoader";
+import { SpinLoader } from "../components/spinLoader";
 import { PostsList } from "../components/PostsList";
 import { Container } from "../components/Container";
+import { Header } from "../components/Header";
 
 export default async function homePage() {
 
   return (
       <Container>
         <header>
-          <h1 className="text-6xl font-bold text-center py-8">
-            Aqui é a header
-          </h1>
-          <p className="text-justify p-8">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat voluptatem consequatur iure nisi iusto. Eos, modi fugiat nesciunt nostrum dolor nemo ipsa ullam alias, possimus non nihil repudiandae molestiae quasi? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla atque praesentium quod aspernatur, sunt debitis aut odio eligendi iusto quaerat? Inventore quasi atque voluptatum harum quidem consectetur accusantium sapiente nam. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maxime sapiente rerum maiores suscipit beatae natus dicta facilis non assumenda amet qui, minus aliquid numquam ipsum quod earum quae recusandae dolorum? Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis cumque illo officia blanditiis neque suscipit? Iure totam accusantium eaque cumque? Nam dignissimos impedit modi eius. Quaerat quae perferendis officiis eaque.
-          </p>
+          <Header/>
         </header>
 
         <Suspense fallback={<SpinLoader/>}>

@@ -1,4 +1,4 @@
-import { SpinLoader } from "../components/Header/spinLoader";
+import { SpinLoader } from "../components/spinLoader";
 
 
 export default async function LoadingRoot() {
