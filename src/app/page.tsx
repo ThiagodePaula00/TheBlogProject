@@ -14,7 +14,7 @@ export default async function homePage() {
 
           <section className="grid grid-cols-1 gap-8 mb-16 sm:grid-cols-2 group">
 
-              <PostCoverImage linkProps={{ href: '/post/dfsgdfsg' }} imageProps={{ width: 1200, height: 700, src: 'imagens/bryen_9.png', alt:'Alt da image', priority: true}} />
+              <PostCoverImage linkProps={{ href: '/post/dfsgdfsg' }} imageProps={{ width: 1200, height: 700, src: '/imagens/bryen_9.png', alt:'Alt da image', priority: true}} />
 
             <div className="flex flex-col gap-4 sm:justify-center">
               <time className="text-slate-600 block text-sm/tight" dateTime="2026-09-24">23/09/26 10:00</time>
