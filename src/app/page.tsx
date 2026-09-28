@@ -1,28 +1,25 @@
 import { Suspense } from "react";
 import { SpinLoader } from "../components/spinLoader";
 import { PostsList } from "../components/PostsList";
-import { Container } from "../components/Container";
-import { Header } from "../components/Header";
 import { PostFeatured } from "../components/PostFeatured";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Teste de título',
+  description: "Essa seria a descrição dessa página.",
+};
 
 export default async function homePage() {
 
   return (
-      <Container>
-          <Header/>
-
-            <PostFeatured/>
+    <>
+          <PostFeatured/>
 
         <Suspense fallback={<SpinLoader/>}>
             <PostsList />
         </Suspense>
+    </>
 
-          <footer>
-          <p className="text-6xl font-bold text-center py-8">
-            Aqui é a footer
-          </p>
-        </footer>
-      </Container>
   );
 }
 
