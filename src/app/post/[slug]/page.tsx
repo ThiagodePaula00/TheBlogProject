@@ -1,18 +1,23 @@
 import { findPostBySlugCached } from '@/src/lib/post/queries';
-import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
 type PostSlugPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export default async function PostSlugPage({ params }: PostSlugPageProps) {
+export async function generateMetadata({params}: PostSlugPageProps): Promise<Metadata> {
   const { slug } = await params;
-
   const post = await findPostBySlugCached(slug);
 
-  if (!post) {
-    notFound();
-  }
+  return {
+    title: post.title,
+    description: post.excerpt,
+  };
+}
+
+export default async function PostSlugPage({ params }: PostSlugPageProps) {
+  const { slug } = await params;
+  const post = await findPostBySlugCached(slug);
 
   return (
     <div>
