@@ -13,15 +13,11 @@ export default async function homePage() {
 
   return (
     <>
+        <Suspense fallback={<SpinLoader className="min-h-20 mb-16" />}>
           <PostFeatured/>
-
-        <Suspense fallback={<SpinLoader/>}>
-            <PostsList />
+          <PostsList />
         </Suspense>
     </>
 
   );
 }
-
-// x e y se referem a eixos. px é padding no eixo x e py é padding no eixo y, por exemplo.
-/* dark:bg-slate-900 dark:text-slate-100 */
