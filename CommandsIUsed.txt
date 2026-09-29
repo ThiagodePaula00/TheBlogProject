@@ -10,3 +10,7 @@ npm i react-markdown
 npm i rehype-sanitize
 
 npm i remark-gfm
+
+
+
+npm install -D @tailwindcss/typography
