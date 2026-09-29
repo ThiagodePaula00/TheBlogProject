@@ -19,6 +19,7 @@ export async function generateMetadata({params}: PostSlugPageProps): Promise<Met
 }
 
 export default async function PostSlugPage({ params }: PostSlugPageProps) {
+  //throw new Error('Erro na slug');
   const { slug } = await params;
 
   return (
