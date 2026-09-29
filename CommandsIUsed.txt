@@ -1,3 +1,12 @@
 npx create-next-app@latest
 
 npm i date-fns
+
+
+
+
+npm i react-markdown
+
+npm i rehype-sanitize
+
+npm i remark-gfm
