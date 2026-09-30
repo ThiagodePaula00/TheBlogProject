@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import { SpinLoader } from "../components/spinLoader";
 import { PostsList } from "../components/PostsList";
 import { PostFeatured } from "../components/PostFeatured";
-import { ServerComponent } from "../components/ServerComponent";
-import { ClientComponent } from "../components/ClientComponent";
+// import { ServerComponent } from "../components/ServerComponent";
+// import { ClientComponent } from "../components/ClientComponent";
 // import { Metadata } from "next";
 
 // export const metadata: Metadata = {
@@ -15,9 +15,9 @@ export default async function homePage() {
 
   return (
     <>
-        <ClientComponent>
+        {/* <ClientComponent>
           <ServerComponent/>
-        </ClientComponent>
+        </ClientComponent> */}
 
         <Suspense fallback={<SpinLoader className="min-h-20 mb-16" />}>
           <PostFeatured/>

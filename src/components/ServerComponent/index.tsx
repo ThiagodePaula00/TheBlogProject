@@ -1,6 +1,6 @@
-export function ServerComponent() {
-    return (
-    <div>
-        ServerComponent
-    </div>)
-}
+// export function ServerComponent() {
+//     return (
+//     <div>
+//         ServerComponent
+//     </div>)
+// }

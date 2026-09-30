@@ -26,3 +26,5 @@ npm install -D @tailwindcss/typography
 npm i drizzle-orm better-sqlite3
 
 npm i -D @types/better-sqlite3 drizzle-kit
+
+npm install --save-dev tsx
