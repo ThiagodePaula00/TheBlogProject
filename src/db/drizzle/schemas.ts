@@ -16,3 +16,6 @@ export const postsTable = sqliteTable('posts', {
 
 export type PostsTableSelectMode = InferSelectModel<typeof postsTable>;
 export type PostsTableInsertMode = InferInsertModel<typeof postsTable>;
+
+// npx drizzle-kit generate
+// npx drizzle-kit migrate
