@@ -1,5 +1,6 @@
 import { revalidateExampleAction } from '@/src/actions/revalidate-example';
-import { formatCurrentHour } from '@/src/utils/format-datetime';
+import { formatHourCached } from '@/src/utils/format-datetime';
+// import { cacheLife, cacheTag } from 'next/cache';
 
 // export const dynamic = 'force-static';
 
@@ -8,8 +9,13 @@ export default async function ExemploDynamicPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+
+  // 'use cache';
+  // cacheLife('seconds');
+  // cacheTag('ExemploDynamicPage');
+
   const { id } = await params;
-  const hour = formatCurrentHour();
+  const hour = await formatHourCached();
 
   const response = await fetch('https://randomuser.me/api/?results=1', {
     next: {
