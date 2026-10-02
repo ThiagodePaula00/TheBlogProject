@@ -1,29 +1,32 @@
 
 import { postRepository } from '@/src/repository/post';
-import { unstable_cache } from 'next/cache';
+import { cacheLife, cacheTag } from 'next/cache';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 
-export const findAllPublicPostsCached =  unstable_cache(cache( async () => 
-  {return await postRepository.findAllPublic()
-  }), ['posts'], {
-    tags: ['posts'],
-  },
-)
+export const findAllPublicPostsCached = cache(async () => {
+  'use cache';
+  cacheLife({ revalidate: 10 });
+  cacheTag('posts');
 
-export const findPostBySlugCached = (slug: string) => unstable_cache(
-  cache(async (slug: string) => {
-  const post = await postRepository.findBySlugPublic(slug).catch(() => undefined)
+  return postRepository.findAllPublic();
+});
+
+const findPostBySlugCachedData = async (slug: string) => {
+  'use cache';
+  cacheLife({ revalidate: 10 });
+  cacheTag(`post-${slug}`);
+
+  return postRepository.findBySlugPublic(slug).catch(() => undefined);
+};
+
+export const findPostBySlugCached = cache(async (slug: string) => {
+  const post = await findPostBySlugCachedData(slug);
 
   if (!post) notFound();
 
   return post;
-}),
-  ['posts'],
-  {
-    tags: [`post-${slug}`],
-  },
-)(slug);
+});
 
 export const findPostByIdCached = cache(
   async (id: string) => await postRepository.findById(id),
