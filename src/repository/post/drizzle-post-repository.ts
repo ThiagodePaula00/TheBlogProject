@@ -1,9 +1,11 @@
 import { PostModel } from "@/src/models/post/post-model";
 import { PostRepository } from "./post-repository";
 import { drizzleDb } from "@/src/db/drizzle";
+import { postsTable } from "@/src/db/drizzle/schemas";
 import { logColor } from "@/src/utils/log-color";
 import { asyncDelay } from "@/src/utils/async-delay";
 import { SIMULATE_WAIT_IN_MS } from "@/src/lib/constants";
+import { eq } from "drizzle-orm";
 
 export class DrizzlePostRepository implements PostRepository {
   async findAllPublic(): Promise<PostModel[]> {
@@ -56,6 +58,15 @@ export class DrizzlePostRepository implements PostRepository {
     });
 
     if (!post) throw new Error('Post não encontrado para ID');
+
+    return post;
+  }
+
+  async deleteById(id: string): Promise<PostModel | undefined> {
+    const [post] = await drizzleDb
+      .delete(postsTable)
+      .where(eq(postsTable.id, id))
+      .returning();
 
     return post;
   }

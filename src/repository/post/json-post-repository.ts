@@ -2,7 +2,7 @@
 import { PostModel } from '@/src/models/post/post-model';
 import { PostRepository } from './post-repository';
 import { resolve } from 'path';
-import { readFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
 
 const ROOT_DIR = process.cwd();
 const JSON_POSTS_FILE_PATH = resolve(ROOT_DIR, 'src', 'db','seed', 'posts.json');
@@ -42,6 +42,19 @@ export class JsonPostRepository implements PostRepository {
       const post = posts.find(post => post.id === id);
 
       if(!post) throw new Error('Post não encontrado para ID');
+
+      return post;
+  }
+
+  async deleteById(id: string): Promise<PostModel | undefined> {
+      const jsonContent = await readFile(JSON_POSTS_FILE_PATH, 'utf-8');
+      const { posts }: { posts: PostModel[] } = JSON.parse(jsonContent);
+      const postIndex = posts.findIndex(post => post.id === id);
+
+      if (postIndex === -1) return undefined;
+
+      const [post] = posts.splice(postIndex, 1);
+      await writeFile(JSON_POSTS_FILE_PATH, JSON.stringify({ posts }, null, 2) + '\n', 'utf-8');
 
       return post;
   }

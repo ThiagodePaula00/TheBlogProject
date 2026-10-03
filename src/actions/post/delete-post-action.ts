@@ -1,9 +1,28 @@
 'use server'
 
-import { asyncDelay } from "@/src/utils/async-delay";
+import { postRepository } from "@/src/repository/post";
+import { revalidatePath, updateTag } from "next/cache";
 
 export async function deletePostAction(id: string) {
-    await asyncDelay(2000)
+    if(!id || typeof id !== 'string') {
+        return {
+            error: 'Dados inválidos',
+        };
+    }
 
-    return id;
+    const post = await postRepository.deleteById(id);
+
+    if (!post) {
+        return {
+            error: 'Post não encontrado',
+        };
+    }
+
+    updateTag('posts');
+    updateTag(`post-${post.slug}`);
+    revalidatePath('/admin/post');
+
+    return {
+        error: '',
+    };
 }
