@@ -33,3 +33,6 @@ npm install --save-dev tsx
 
 
 npm i lucide-react
+
+
+npm i react-toastify

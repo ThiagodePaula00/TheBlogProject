@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
 import { SpinLoader } from "../../../components/spinLoader";
-import PostListAdmin from "@/src/components/PostsListAdmin";
+import PostListAdmin from "@/src/components/admin/PostsListAdmin";
+
 
 export const metadata: Metadata = {
     title: 'Post Admin',
