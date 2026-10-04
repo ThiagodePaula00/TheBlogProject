@@ -23,7 +23,7 @@ export default async function PostListAdmin() {
           <DelelePostButton id={post.id} title={post.title}/>
         </div>
       )
-      )};
+      )}
 
     </div>
   );
