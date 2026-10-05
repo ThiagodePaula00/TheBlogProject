@@ -1,11 +1,15 @@
 'use client'
 
+import { useState } from "react";
 import { Button } from "../../Button";
 import { InputCheckbox } from "../../InputCheckbox";
 import { InputText } from "../../InputText";
+import { MarkdownEditor } from "../../MarkdownEditor";
 
 
 export function ManagePostForm() {
+  const [contentValue, setContentValue] = useState('');
+
   return (
     <form action='' className='mb-16'>
       <div className='flex flex-col gap-6'>
@@ -24,16 +28,28 @@ export function ManagePostForm() {
           placeholder='Digite seu sobrenome'
           defaultValue='Olá mundo'
         />
+
+        
+        <MarkdownEditor
+          labelText='Conteúdo'
+          disabled={false}
+          textAreaName='content'
+          value={contentValue}
+          setValue={setContentValue}
+        />
+
         <InputText
           disabled
           labelText='Sobrenome'
           placeholder='Digite seu sobrenome'
         />
+
         <InputText
           labelText='Sobrenome'
           placeholder='Digite seu sobrenome'
           readOnly
         />
+
         <InputText
           labelText='Sobrenome'
           placeholder='Digite seu sobrenome'
