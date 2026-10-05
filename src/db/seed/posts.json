@@ -1,18 +1,6 @@
 {
   "posts": [
     {
-      "id": "1b6a5f57-8a19-4933-91f4-1af678464ded",
-      "title": "Como a escrita pode mudar sua carreira",
-      "slug": "como-a-escrita-pode-mudar-sua-carreira",
-      "excerpt": "Muitas empresas e desenvolvedores individuais escolhem o Next.js justamente porque ele consegue unir simplicidade com recursos avançados.",
-      "content": "Muitas empresas e desenvolvedores individuais escolhem o Next.js justamente porque ele consegue unir simplicidade com recursos avançados.",
-      "coverImageUrl": "/imagens/bryen_9.png",
-      "published": true,
-      "createdAt": "2025-04-06T00:24:38.616Z",
-      "updatedAt": "2025-04-06T00:33:56.907Z",
-      "author": "Pedro Martins"
-    },
-    {
       "id": "9eb8b7ac-2b48-4835-880a-a1c798e1a595",
       "slug": "this-will-create-the-dillinger-image-and-pull-in-the-necessary-dependencies.-atbvp6",
       "title": "This will create the dillinger image and pull in the necessary dependencies.",
