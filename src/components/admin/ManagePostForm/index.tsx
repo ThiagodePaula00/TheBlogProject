@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "../../Button";
 import { InputCheckbox } from "../../InputCheckbox";
 import { InputText } from "../../InputText";
+import { ImageUploader } from "../ImageUploader";
 import { MarkdownEditor } from "../../MarkdownEditor";
 
 
@@ -18,6 +19,9 @@ export function ManagePostForm() {
           placeholder='Digite seu nome'
           type='password'
         />
+
+        <ImageUploader />
+
         <InputText labelText='Sobrenome' placeholder='Digite seu sobrenome' />
 
         <InputCheckbox labelText='Sobrenome' />
@@ -29,7 +33,6 @@ export function ManagePostForm() {
           defaultValue='Olá mundo'
         />
 
-        
         <MarkdownEditor
           labelText='Conteúdo'
           disabled={false}
