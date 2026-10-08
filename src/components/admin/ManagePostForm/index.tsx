@@ -1,14 +1,13 @@
 'use client';
 
 import type { PublicPost } from '@/src/dto/post/dto';
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { Button } from "../../Button";
 import { InputCheckbox } from "../../InputCheckbox";
 import { InputText } from "../../InputText";
 import { ImageUploader } from "../ImageUploader";
 import { MarkdownEditor } from "../../MarkdownEditor";
-
-
+import { createPostAction } from '@/src/actions/post/create-post-action';
 
 type ManagePostFormProps = {
   publicPost?: PublicPost;
@@ -17,8 +16,18 @@ type ManagePostFormProps = {
 export function ManagePostForm({ publicPost }: ManagePostFormProps) {
   const [contentValue, setContentValue] = useState(publicPost?.content ?? '');
 
+  const initialState = {
+    numero: 0,
+  }
+
+  const [state, action, isPending] = useActionState(createPostAction, initialState);
+
+  useEffect(() => {
+
+  }, [state.numero]);
+
   return (
-    <form action='' className='mb-16'>
+    <form action={action} className='mb-16'>
       <div className='flex flex-col gap-6'>
         <InputText
           labelText='ID'
