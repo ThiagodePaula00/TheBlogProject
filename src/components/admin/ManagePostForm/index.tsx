@@ -1,7 +1,7 @@
 'use client';
 
 import { makeParticialPublicPost, type PublicPost } from '@/src/dto/post/dto';
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 import { Button } from "../../Button";
 import { InputCheckbox } from "../../InputCheckbox";
 import { InputText } from "../../InputText";
@@ -45,7 +45,7 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
           name='slug'
           placeholder='Slug gerada automaticamente'
           type='text'
-          defaultValue={formState.slug}
+          value={formState.slug}
           readOnly
         />
 
@@ -99,7 +99,14 @@ export function ManagePostForm({ publicPost }: ManagePostFormProps) {
         />
 
         <div className='mt-4'>
-          <Button type='submit'>Enviar</Button>
+          {state.errors.length > 0 && (
+            <ul className='mb-4 list-inside list-disc text-red-700' role='alert'>
+              {state.errors.map((error, index) => (
+                <li key={`${index}-${error}`}>{error}</li>
+              ))}
+            </ul>
+          )}
+          <Button type='submit' disabled={isPending}>Enviar</Button>
         </div>
       </div>
     </form>
