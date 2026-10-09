@@ -8,12 +8,13 @@ import {
 } from '@/src/dto/post/dto';
 import { updateTag } from 'next/cache';
 import { getZodErrorMessages } from '@/src/utils/get-zod-error-message';
+import { makeRandomString } from '@/src/utils/make-random-string';
 import { postRepository } from '@/src/repository/post';
 
 type UpdatePostActionState = {
   formState: PublicPost;
   errors: string[];
-  success?: true;
+  success?: string;
 };
 
 export async function updatePostAction(
@@ -68,7 +69,7 @@ export async function updatePostAction(
     return {
       formState: makeParticialPublicPost(formDataToObj),
       errors: ['Erro desconhecido'],
-    };
+    }
   }
 
   updateTag('posts');
@@ -77,6 +78,6 @@ export async function updatePostAction(
   return {
     formState: makePublicPostFromDb(post),
     errors: [],
-    success: true,
+    success: makeRandomString(),
   };
 }

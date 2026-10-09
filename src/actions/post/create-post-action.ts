@@ -5,14 +5,14 @@ import { PostCreateSchema } from '@/src/lib/post/validation';
 import type { PostModel } from '@/src/models/post/post-model';
 import { postRepository } from '@/src/repository/post';
 import { makeSlugFromText } from '@/src/utils/make-slug-from-texts';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { v7 as uuidv7 } from 'uuid';
 
 type CreatePostActionState = {
   formState: PublicPost;
   errors: string[];
-  success?: true;
+  success?: string;
 };
 
 export async function createPostAction(
@@ -62,6 +62,6 @@ export async function createPostAction(
     };
   }
 
-  revalidateTag('post', 'max');
-  redirect(`/admin/post/${newPost.id}`);
+  updateTag('posts');
+  redirect(`/admin/post/${newPost.id}?created=1`);
 }

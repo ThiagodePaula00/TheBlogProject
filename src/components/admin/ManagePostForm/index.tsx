@@ -10,6 +10,7 @@ import { ImageUploader } from '../ImageUploader';
 import { MarkdownEditor } from '../../MarkdownEditor';
 import { createPostAction } from '@/src/actions/post/create-post-action';
 import { updatePostAction } from '@/src/actions/post/update-post-action';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 type ManagePostFormProps =
   | {
@@ -26,6 +27,10 @@ const actions = {
 };
 
 export function ManagePostForm(props: ManagePostFormProps) {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const created = searchParams.get('created');
   const publicPost = props.mode === 'update' ? props.publicPost : undefined;
   const initialState = {
     formState: makeParticialPublicPost(publicPost),
@@ -42,6 +47,18 @@ export function ManagePostForm(props: ManagePostFormProps) {
       toast.success('Post atualizado com sucesso!');
     }
   }, [state.success]);
+
+  useEffect(() => {
+    if (created !== '1') return;
+
+    toast.dismiss();
+    toast.success('Post criado com sucesso!');
+
+    const nextSearchParams = new URLSearchParams(searchParams.toString());
+    nextSearchParams.delete('created');
+    const query = nextSearchParams.toString();
+    router.replace(query ? `${pathname}?${query}` : pathname);
+  }, [created, pathname, router, searchParams]);
 
   return (
     <form action={action} className='mb-16'>
