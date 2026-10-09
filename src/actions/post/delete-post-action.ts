@@ -10,7 +10,20 @@ export async function deletePostAction(id: string) {
         };
     }
 
-    const post = await postRepository.deleteById(id);
+    let post;
+    try {
+        post = await postRepository.delete(id);
+    } catch (e: unknown) {
+        if (e instanceof Error) {
+        return {
+            error: e.message,
+        };
+        }
+
+        return {
+        error: 'Erro desconhecido',
+        };
+    }
 
     if (!post) {
         return {
