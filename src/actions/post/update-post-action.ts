@@ -2,11 +2,11 @@
 
 import { PostUpdateSchema } from '@/src/lib/post/validation';
 import {
-  makePartialPublicPost,
+  makeParticialPublicPost,
   makePublicPostFromDb,
-  PublicPost,
-} 
-import { revalidateTag } from 'next/cache';
+  type PublicPost,
+} from '@/src/dto/post/dto';
+import { updateTag } from 'next/cache';
 import { getZodErrorMessages } from '@/src/utils/get-zod-error-message';
 import { postRepository } from '@/src/repository/post';
 
@@ -29,9 +29,9 @@ export async function updatePostAction(
     };
   }
 
-  const id = formData.get('id')?.toString() || '';
+  const id = formData.get('id');
 
-  if (!id || typeof id !== 'string') {
+  if (typeof id !== 'string' || !id) {
     return {
       formState: prevState.formState,
       errors: ['ID inválido'],
@@ -42,10 +42,10 @@ export async function updatePostAction(
   const zodParsedObj = PostUpdateSchema.safeParse(formDataToObj);
 
   if (!zodParsedObj.success) {
-    const errors = getZodErrorMessages(zodParsedObj.error.format());
+    const errors = getZodErrorMessages(zodParsedObj.error);
     return {
       errors,
-      formState: makePartialPublicPost(formDataToObj),
+      formState: makeParticialPublicPost(formDataToObj),
     };
   }
 
@@ -60,19 +60,19 @@ export async function updatePostAction(
   } catch (e: unknown) {
     if (e instanceof Error) {
       return {
-        formState: makePartialPublicPost(formDataToObj),
+        formState: makeParticialPublicPost(formDataToObj),
         errors: [e.message],
       };
     }
 
     return {
-      formState: makePartialPublicPost(formDataToObj),
+      formState: makeParticialPublicPost(formDataToObj),
       errors: ['Erro desconhecido'],
     };
   }
 
-  revalidateTag('posts');
-  revalidateTag(`post-${post.slug}`);
+  updateTag('posts');
+  updateTag(`post-${post.slug}`);
 
   return {
     formState: makePublicPostFromDb(post),
