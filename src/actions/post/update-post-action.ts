@@ -8,6 +8,7 @@ import {
 } from '@/src/dto/post/dto';
 import { updateTag } from 'next/cache';
 import { getZodErrorMessages } from '@/src/utils/get-zod-error-message';
+import { asyncDelay } from '@/src/utils/async-delay';
 import { makeRandomString } from '@/src/utils/make-random-string';
 import { postRepository } from '@/src/repository/post';
 
@@ -22,6 +23,7 @@ export async function updatePostAction(
   formData: FormData,
 ): Promise<UpdatePostActionState> {
   // TODO: verificar se o usuário tá logado
+  await asyncDelay(3000);
 
   if (!(formData instanceof FormData)) {
     return {
