@@ -1,9 +1,13 @@
 'use server'
 
+import { drizzleDb } from '@/src/db/drizzle';
+import { postsTable } from '@/src/db/drizzle/schemas';
 import { makeParticialPublicPost, type PublicPost } from '@/src/dto/post/dto';
 import { PostCreateSchema } from '@/src/lib/post/validation';
 import type { PostModel } from '@/src/models/post/post-model';
 import { makeSlugFromText } from '@/src/utils/make-slug-from-texts';
+import { revalidateTag } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { v7 as uuidv7 } from 'uuid';
 
 type CreatePostActionState = {
@@ -42,8 +46,8 @@ export async function createPostAction(
     slug: makeSlugFromText(validPostData.title),
   };
 
-  return {
-    formState: newPost,
-    errors: [],
-  };
+  await drizzleDb.insert(postsTable).values(newPost);
+
+  revalidateTag('post', 'max');
+  redirect(`/admin/post${newPost.id}`);
 }

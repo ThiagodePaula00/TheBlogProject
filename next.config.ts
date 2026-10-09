@@ -8,7 +8,25 @@ const nextConfig: NextConfig = {
             revalidate: 10,
             expire: 10,
         }
-    }
+    },
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'localhost',
+                port: '3000',
+                pathname: '/**',
+                search: '',
+            },
+            {
+                protocol: 'http',
+                hostname: 'localhost',
+                port: '3000',
+                pathname: '/**',
+                search: '',
+            },
+        ],
+    },
 };
 
 export default nextConfig;
