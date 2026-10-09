@@ -1,52 +1,93 @@
 'use server';
 
-import { IMAGE_SERVER_URL, IMAGE_UPLOAD_DIRECTORY, IMAGE_UPLOAD_MAX_SIZE } from "@/src/lib/constants";
-import { mkdir, writeFile } from "fs/promises";
-import { extname, resolve } from "path";
+import {
+  IMAGE_UPLOAD_DIRECTORY,
+  IMAGE_UPLOAD_MAX_SIZE,
+} from '@/src/lib/constants';
+import { randomUUID } from 'crypto';
+import { mkdir, writeFile } from 'fs/promises';
+import { resolve } from 'path';
+import sharp from 'sharp';
 
-type uploadImageActionResult = {
-    url: string;
-    error: string;
-}
+const MAX_IMAGE_PIXELS = 20_000_000;
+const MAX_PROCESSED_IMAGE_SIZE = 4 * 1024 * 1024;
+const SUPPORTED_INPUT_FORMATS = new Set(['jpeg', 'png', 'webp']);
+
+type UploadImageActionResult = {
+  url: string;
+  error: string;
+};
 
 export async function uploadImageAction(
-    formData: FormData,
-): Promise<uploadImageActionResult>  {
-    const makeResult = ({url = '', error = ''}) => ({url, error});
+  formData: FormData,
+): Promise<UploadImageActionResult> {
+  const makeResult = (
+    { url = '', error = '' }: Partial<UploadImageActionResult> = {},
+  ): UploadImageActionResult => ({ url, error });
 
-    if (!(formData instanceof FormData)) {
-        return makeResult ({error: 'Dados inválidos'});
+  if (!(formData instanceof FormData)) {
+    return makeResult({ error: 'Dados inválidos' });
+  }
+
+  const file = formData.get('file');
+
+  if (!(file instanceof File) || file.size === 0) {
+    return makeResult({ error: 'Arquivo inválido' });
+  }
+
+  if (file.size > IMAGE_UPLOAD_MAX_SIZE) {
+    return makeResult({ error: 'Arquivo muito grande' });
+  }
+
+  const inputBuffer = Buffer.from(await file.arrayBuffer());
+  let inputFormat: string | undefined;
+
+  try {
+    const metadata = await sharp(inputBuffer, {
+      failOn: 'error',
+      limitInputPixels: MAX_IMAGE_PIXELS,
+    }).metadata();
+
+    inputFormat = metadata.format;
+    if (
+      !inputFormat ||
+      !SUPPORTED_INPUT_FORMATS.has(inputFormat) ||
+      (metadata.pages ?? 1) > 1
+    ) {
+      return makeResult({ error: 'Formato de imagem inválido' });
     }
-    
-    const file = formData.get('file');
-    
-    if (!(file instanceof File)) {
-        return makeResult ({error: 'Arquivo inválido'});
+  } catch {
+    return makeResult({ error: 'Imagem inválida ou corrompida' });
+  }
+
+  const fileName = `${randomUUID()}.webp`;
+  const uploadDirectory = resolve(
+    process.cwd(),
+    'public',
+    IMAGE_UPLOAD_DIRECTORY,
+  );
+
+  try {
+    const processedImage = await sharp(inputBuffer, {
+      failOn: 'error',
+      limitInputPixels: MAX_IMAGE_PIXELS,
+    })
+      .rotate()
+      .webp({ quality: 82 })
+      .toBuffer();
+
+    if (processedImage.length > MAX_PROCESSED_IMAGE_SIZE) {
+      return makeResult({ error: 'Imagem processada muito grande' });
     }
-    
-    if (file.size > IMAGE_UPLOAD_MAX_SIZE) {
-        return makeResult ({error: 'Arquivo muito grande'});
-    }
-    
-    if (!file.type.startsWith('image/')) {
-        return makeResult ({error: 'Imagem inválida'});
-    }
 
-    const imageExtension = extname(file.name);
-    const uniqueImageName = `${Date.now()}${imageExtension}`;
+    await mkdir(uploadDirectory, { recursive: true });
+    await writeFile(resolve(uploadDirectory, fileName), processedImage, {
+      flag: 'wx',
+    });
+  } catch (error) {
+    console.error('Falha ao processar ou salvar imagem enviada', error);
+    return makeResult({ error: 'Falha ao processar a imagem' });
+  }
 
-    const uploadFullPath = resolve(process.cwd(), 'public', IMAGE_UPLOAD_DIRECTORY);
-
-    await mkdir(uploadFullPath, {recursive: true});
-
-    const fileArrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(fileArrayBuffer);
-
-    const fileFullPath = resolve(uploadFullPath, uniqueImageName);
-
-    await writeFile(fileFullPath, buffer);
-
-    const url = `${IMAGE_SERVER_URL}/${uniqueImageName}`
-
-    return makeResult({url});
+  return makeResult({ url: `/${IMAGE_UPLOAD_DIRECTORY}/${fileName}` });
 }

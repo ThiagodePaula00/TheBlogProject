@@ -52,16 +52,22 @@ export function ImageUploader({ disabled = false }: ImageUploaderProps) {
     formData.append('file', file);
 
     startTransition(async () => {
-      const result = await uploadImageAction(formData);
+      try {
+        const result = await uploadImageAction(formData);
 
-      if (result.error) {
-        toast.error(result.error);
+        if (result.error) {
+          toast.error(result.error);
+          setImgUrl('');
+          return;
+        }
+
+        setImgUrl(result.url);
+        toast.success('Imagem enviada');
+      } catch (error) {
+        console.error('Falha na requisição de upload', error);
+        toast.error('Falha ao enviar a imagem');
         setImgUrl('');
-        return;
       }
-
-      setImgUrl(result.url);
-      toast.success('Imagem enviada');
     });
 
     fileInput.value = '';
@@ -100,7 +106,7 @@ export function ImageUploader({ disabled = false }: ImageUploaderProps) {
         className='hidden'
         name='file'
         type='file'
-        accept='image/*'
+        accept='image/jpeg,image/png,image/webp'
         disabled={isUploading || disabled}
       />
     </div>
