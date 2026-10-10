@@ -6,6 +6,7 @@ import {
   makePublicPostFromDb,
   type PublicPost,
 } from '@/src/dto/post/dto';
+import { verifyLoginSession } from '@/src/lib/login/manage-login';
 import { updateTag } from 'next/cache';
 import { getZodErrorMessages } from '@/src/utils/get-zod-error-message';
 import { makeRandomString } from '@/src/utils/make-random-string';
@@ -21,8 +22,6 @@ export async function updatePostAction(
   prevState: UpdatePostActionState,
   formData: FormData,
 ): Promise<UpdatePostActionState> {
-  // TODO: verificar se o usuário tá logado
-
   if (!(formData instanceof FormData)) {
     return {
       formState: prevState.formState,
@@ -41,6 +40,15 @@ export async function updatePostAction(
 
   const formDataToObj = Object.fromEntries(formData.entries());
   const zodParsedObj = PostUpdateSchema.safeParse(formDataToObj);
+
+  const isAuthenticated = await verifyLoginSession();
+
+  if (!isAuthenticated) {
+    return {
+      formState: makeParticialPublicPost(formDataToObj),
+      errors: ['Faça login novamente antes de salvar.'],
+    };
+  }
 
   if (!zodParsedObj.success) {
     const errors = getZodErrorMessages(zodParsedObj.error);

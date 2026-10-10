@@ -3,6 +3,7 @@
 import {
   IMAGE_UPLOAD_MAX_SIZE,
 } from '@/src/lib/constants';
+import { verifyLoginSession } from '@/src/lib/login/manage-login';
 import { randomUUID } from 'crypto';
 import { mkdir, writeFile } from 'fs/promises';
 import { resolve } from 'path';
@@ -23,6 +24,12 @@ export async function uploadImageAction(
   const makeResult = (
     { url = '', error = '' }: Partial<UploadImageActionResult> = {},
   ): UploadImageActionResult => ({ url, error });
+
+  const isAuthenticated = await verifyLoginSession();
+
+  if (!isAuthenticated) {
+    return makeResult({ error: 'Faça login novamente antes de enviar a imagem' });
+  }
 
   if (!(formData instanceof FormData)) {
     return makeResult({ error: 'Dados inválidos' });
