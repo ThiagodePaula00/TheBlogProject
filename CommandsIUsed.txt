@@ -48,3 +48,7 @@ npm i uuid slugify
 ---
 
 npm i sharp
+
+---
+
+npm i bcryptjs
