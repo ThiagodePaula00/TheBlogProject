@@ -1,11 +1,27 @@
 'use client'
 
-import { CircleXIcon, FileTextIcon, HouseIcon, MenuIcon, PlusIcon } from 'lucide-react';
+import { logoutAction } from '@/src/actions/login/logout-action';
+import {
+  CircleXIcon,
+  FileTextIcon,
+  HourglassIcon,
+  HouseIcon,
+  LogOutIcon,
+  MenuIcon,
+  PlusIcon,
+} from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 
 export function MenuAdmin() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  function handleLogout() {
+    startTransition(async () => {
+      await logoutAction();
+    });
+  }
 
   const navClasses = [
     'bg-slate-900 text-slate-100 rounded-lg',
@@ -61,6 +77,26 @@ export function MenuAdmin() {
         <PlusIcon />
         Criar post
       </Link>
+
+      <button
+        className={linkClasses}
+        type="button"
+        onClick={handleLogout}
+        disabled={isPending}
+        aria-busy={isPending}
+      >
+        {isPending ? (
+          <>
+            <HourglassIcon />
+            Aguarde...
+          </>
+        ) : (
+          <>
+            <LogOutIcon />
+            Sair
+          </>
+        )}
+      </button>
 
     </nav>
   )
