@@ -1,7 +1,6 @@
 'use server';
 
 import {
-  IMAGE_UPLOAD_DIRECTORY,
   IMAGE_UPLOAD_MAX_SIZE,
 } from '@/src/lib/constants';
 import { randomUUID } from 'crypto';
@@ -61,10 +60,15 @@ export async function uploadImageAction(
   }
 
   const fileName = `${randomUUID()}.webp`;
+  const uploadDirectoryName = process.env.IMAGE_UPLOAD_DIRECTORY || 'uploads';
+  if (!/^[a-zA-Z0-9_-]+$/.test(uploadDirectoryName)) {
+    return makeResult({ error: 'Diretório de upload inválido' });
+  }
+
   const uploadDirectory = resolve(
     process.cwd(),
     'public',
-    IMAGE_UPLOAD_DIRECTORY,
+    uploadDirectoryName,
   );
 
   try {
@@ -89,5 +93,5 @@ export async function uploadImageAction(
     return makeResult({ error: 'Falha ao processar a imagem' });
   }
 
-  return makeResult({ url: `/${IMAGE_UPLOAD_DIRECTORY}/${fileName}` });
+  return makeResult({ url: `/${uploadDirectoryName}/${fileName}` });
 }
