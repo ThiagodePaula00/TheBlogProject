@@ -43,3 +43,8 @@ npm install -D @types/sanitize-html
 ---
 
 npm i uuid slugify
+
+
+---
+
+npm i sharp
