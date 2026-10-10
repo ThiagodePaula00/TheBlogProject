@@ -52,3 +52,9 @@ npm i sharp
 ---
 
 npm i bcryptjs
+
+
+---
+
+
+npm i jose
