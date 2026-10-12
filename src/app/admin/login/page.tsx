@@ -2,12 +2,14 @@ import { LoginForm } from "@/src/components/admin/LoginForm";
 import ErrorMessage from "@/src/components/ErrorMessage";
 import type { Metadata } from "next";
 import { connection } from "next/server";
+import { Suspense } from "react";
+import { SpinLoader } from "@/src/components/spinLoader";
 
 export const metadata: Metadata = {
   title: "Login",
 };
 
-export default async function AdminLoginPage() {
+async function AdminLoginContent() {
   await connection();
 
   const allowLogin = Boolean(Number(process.env.ALLOW_LOGIN));
@@ -22,4 +24,12 @@ export default async function AdminLoginPage() {
   }
 
   return <LoginForm />;
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={<SpinLoader />}>
+      <AdminLoginContent />
+    </Suspense>
+  );
 }
