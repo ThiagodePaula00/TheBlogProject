@@ -25,7 +25,7 @@ export function Dialog({isVisible = false, title, content, onCancel, onConfirm, 
           onClick={handleCancel}
         >
 
-        <div className="bg-slate-100 p-6 rounded-lg max-w-2xl mx-6 flex flex-col gap-6 shadow-lg shadow-black/30 text-center"
+        <div className="bg-slate-100 p-6 rounded-lg max-w-2xl mx-6 flex flex-col gap-6 shadow-lg shadow-black/30 text-center dark:bg-slate-800 dark:text-slate-100"
         role="dialog"
         aria-modal={true}
         aria-labelledby="dialog-title"

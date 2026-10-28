@@ -13,12 +13,12 @@ export default async function PostListAdmin() {
     <div className='mb-16'>
       {posts.map((post) => (
         <div
-          className={`py-2 px-2 ${!post.published && "bg-slate-300"} flex gap-2 items-center justify-between`}
+          className={`py-2 px-2 ${!post.published && "bg-slate-300 dark:bg-slate-700"} flex gap-2 items-center justify-between`}
           key={post.id}
         >
           <Link href={`/admin/post/${post.id}`}>{post.title}</Link>
 
-          {!post.published && <span className="text-xl text-slate-600 italic"> (Não publicado)</span>}
+          {!post.published && <span className="text-xl text-slate-600 italic dark:text-slate-300"> (Não publicado)</span>}
 
           <DelelePostButton id={post.id} title={post.title}/>
         </div>

@@ -24,7 +24,7 @@ export async function SinglePost({slug}: SinglePostprops) {
         </p>
       </header>
 
-      <p className="text-xl mb-4 text-slate-600">{post.excerpt}</p>
+      <p className="text-xl mb-4 text-slate-600 dark:text-slate-400">{post.excerpt}</p>
 
       <SafeMarkdown markdown={post.content} />
     </article>
